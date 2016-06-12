@@ -11,13 +11,13 @@ import com.badlogic.gdx.graphics.g3d.ModelInstance;
 import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector3;
-import com.qualcomm.vuforia.Matrix44F;
-import com.qualcomm.vuforia.Tool;
-import com.qualcomm.vuforia.TrackableResult;
-import com.qualcomm.vuforia.VIDEO_BACKGROUND_REFLECTION;
 
 import com.github.daemontus.ar.vuforia.SampleMath;
 import com.github.daemontus.ar.vuforia.VuforiaRenderer;
+import com.vuforia.Matrix44F;
+import com.vuforia.Tool;
+import com.vuforia.TrackableResult;
+import com.vuforia.VIDEO_BACKGROUND_REFLECTION;
 
 /**
  * Class responsible for rendering and scene transformations.
@@ -93,7 +93,7 @@ public class Renderer {
 
             float[] rotated;
             //switch axis and rotate to compensate coordinates change
-            if (com.qualcomm.vuforia.Renderer.getInstance().getVideoBackgroundConfig().getReflection() == VIDEO_BACKGROUND_REFLECTION.VIDEO_BACKGROUND_REFLECTION_ON) {
+            if (com.vuforia.Renderer.getInstance().getVideoBackgroundConfig().getReflection() == VIDEO_BACKGROUND_REFLECTION.VIDEO_BACKGROUND_REFLECTION_ON) {
                 // Front camera
                 rotated = new float[]{
                         raw[1], raw[0], raw[2], raw[3],
