@@ -3,7 +3,6 @@ package com.github.daemontus.ar.libgdx;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.GLCommon;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
 import com.badlogic.gdx.graphics.g3d.Environment;
 import com.badlogic.gdx.graphics.g3d.ModelBatch;
@@ -26,7 +25,7 @@ public class Renderer {
 
     private static final String LOG = "RENDERER";
 
-    private static final float MODEL_SCALE = 0.2f;
+    private static final float MODEL_SCALE = 8.0f;
 
     private PerspectiveCamera camera;
     private Environment lights;
@@ -52,7 +51,7 @@ public class Renderer {
 
     public void render(Display display, float delta) {
 
-        GLCommon gl = Gdx.gl;
+        GL20 gl = Gdx.gl;
 
         gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
 
@@ -129,7 +128,8 @@ public class Renderer {
 
         model.transform.set(new Matrix4());
         //the model is rotated
-        model.transform.setToRotation(1.0F, 0.0F, 0.0F, 90.0F);
+        model.transform.rotate(1.0F, 0.0F, 0.0F, 90.0F);
+        model.transform.rotate(0.0F, 1.0F, 0.0F, 90.0F);
         model.transform.scale(MODEL_SCALE, MODEL_SCALE, MODEL_SCALE);
 
         camera.update();

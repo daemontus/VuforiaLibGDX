@@ -55,7 +55,7 @@ public class ArActivity extends AndroidApplication implements SessionControl {
         AndroidApplicationConfiguration config = new AndroidApplicationConfiguration();
         config.useAccelerometer = false;
         config.useCompass = false;
-        config.useGL20 = true;
+        //config.useGL20 = true;
 
         mEngine = new Engine(mRenderer);
         View glView = initializeForView(mEngine, config);

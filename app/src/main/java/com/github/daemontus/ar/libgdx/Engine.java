@@ -31,7 +31,7 @@ public class Engine extends Game {
     public void resize(int width, int height) {
         super.resize(width, height);
         Log.d("ENGINE", "Resize: "+width+"x"+height);
-        vuforiaRenderer.onSurfaceChanged(null, width, height);
+        vuforiaRenderer.onSurfaceChanged(width, height);
     }
 
     @Override
