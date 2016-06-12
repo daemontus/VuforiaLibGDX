@@ -10,20 +10,21 @@ import android.widget.Toast;
 
 import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
-import com.qualcomm.vuforia.CameraDevice;
-import com.qualcomm.vuforia.DataSet;
-import com.qualcomm.vuforia.HINT;
-import com.qualcomm.vuforia.ImageTracker;
-import com.qualcomm.vuforia.State;
-import com.qualcomm.vuforia.Tracker;
-import com.qualcomm.vuforia.TrackerManager;
-import com.qualcomm.vuforia.Vuforia;
 
 import com.github.daemontus.ar.libgdx.Engine;
 import com.github.daemontus.ar.vuforia.AppSession;
 import com.github.daemontus.ar.vuforia.SessionControl;
 import com.github.daemontus.ar.vuforia.VuforiaException;
 import com.github.daemontus.ar.vuforia.VuforiaRenderer;
+import com.vuforia.CameraDevice;
+import com.vuforia.DataSet;
+import com.vuforia.HINT;
+import com.vuforia.ObjectTracker;
+import com.vuforia.STORAGE_TYPE;
+import com.vuforia.State;
+import com.vuforia.Tracker;
+import com.vuforia.TrackerManager;
+import com.vuforia.Vuforia;
 
 
 public class ArActivity extends AndroidApplication implements SessionControl {
@@ -106,7 +107,7 @@ public class ArActivity extends AndroidApplication implements SessionControl {
             mRenderer.mIsActive = true;
 
             try {
-                session.startAR(CameraDevice.CAMERA.CAMERA_BACK);
+                session.startAR(CameraDevice.CAMERA_DIRECTION.CAMERA_DIRECTION_DEFAULT);
             } catch (VuforiaException e) {
                 Log.e(LOGTAG, e.getString());
             }
@@ -153,7 +154,7 @@ public class ArActivity extends AndroidApplication implements SessionControl {
 
         // Initialize the image tracker:
         TrackerManager trackerManager = TrackerManager.getInstance();
-        Tracker tracker = trackerManager.initTracker(ImageTracker.getClassType());
+        Tracker tracker = trackerManager.initTracker(ObjectTracker.getClassType());
 
         if (tracker == null) {
             Log.d(LOGTAG, "Failed to initialize ImageTracker.");
@@ -168,7 +169,7 @@ public class ArActivity extends AndroidApplication implements SessionControl {
     public boolean doLoadTrackersData() {
         // Get the image tracker:
         TrackerManager trackerManager = TrackerManager.getInstance();
-        ImageTracker imageTracker = (ImageTracker) trackerManager.getTracker(ImageTracker.getClassType());
+        ObjectTracker imageTracker = (ObjectTracker) trackerManager.getTracker(ObjectTracker.getClassType());
 
         if (imageTracker == null) {
             Log.d(LOGTAG, "Failed to load tracking data set because the ImageTracker has not been initialized.");
@@ -183,7 +184,7 @@ public class ArActivity extends AndroidApplication implements SessionControl {
         }
 
         // Load the data sets:
-        if (!posterDataSet.load("StonesAndChips.xml", DataSet.STORAGE_TYPE.STORAGE_APPRESOURCE)) {
+        if (!posterDataSet.load("StonesAndChips.xml", STORAGE_TYPE.STORAGE_APPRESOURCE)) {
             Log.d(LOGTAG, "Failed to load data set.");
             return false;
         }
@@ -205,7 +206,7 @@ public class ArActivity extends AndroidApplication implements SessionControl {
         boolean result = true;
 
         Tracker imageTracker = TrackerManager.getInstance().getTracker(
-                ImageTracker.getClassType());
+                ObjectTracker.getClassType());
         if (imageTracker != null) {
             imageTracker.start();
             Vuforia.setHint(HINT.HINT_MAX_SIMULTANEOUS_IMAGE_TARGETS, 1);
@@ -222,7 +223,7 @@ public class ArActivity extends AndroidApplication implements SessionControl {
         boolean result = true;
 
         Tracker imageTracker = TrackerManager.getInstance().getTracker(
-                ImageTracker.getClassType());
+                ObjectTracker.getClassType());
         if (imageTracker != null)
             imageTracker.stop();
         else
@@ -239,8 +240,8 @@ public class ArActivity extends AndroidApplication implements SessionControl {
 
         // Get the image tracker:
         TrackerManager trackerManager = TrackerManager.getInstance();
-        ImageTracker imageTracker = (ImageTracker) trackerManager
-                .getTracker(ImageTracker.getClassType());
+        ObjectTracker imageTracker = (ObjectTracker) trackerManager
+                .getTracker(ObjectTracker.getClassType());
         if (imageTracker == null) {
             Log.d(LOGTAG, "Failed to destroy the tracking data set because the ImageTracker has not been initialized.");
             return false;
@@ -266,7 +267,7 @@ public class ArActivity extends AndroidApplication implements SessionControl {
 
         // Deinit the image tracker:
         TrackerManager trackerManager = TrackerManager.getInstance();
-        trackerManager.deinitTracker(ImageTracker.getClassType());
+        trackerManager.deinitTracker(ObjectTracker.getClassType());
 
         return true;
     }

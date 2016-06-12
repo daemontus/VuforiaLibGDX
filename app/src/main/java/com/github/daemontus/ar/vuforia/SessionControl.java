@@ -1,6 +1,7 @@
 package com.github.daemontus.ar.vuforia;
 
-import com.qualcomm.vuforia.State;
+
+import com.vuforia.State;
 
 /**
  * Interface you neet to implement if you want to control vuforia

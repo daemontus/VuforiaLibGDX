@@ -1,8 +1,5 @@
 package com.github.daemontus.ar.vuforia;
 
-/**
- * Created by daemontus on 03/04/14.
- */
 public class VuforiaException extends Exception {
 
 

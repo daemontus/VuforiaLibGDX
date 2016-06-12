@@ -9,17 +9,15 @@ import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.WindowManager;
 
-import com.qualcomm.vuforia.CameraCalibration;
-import com.qualcomm.vuforia.CameraDevice;
-import com.qualcomm.vuforia.Matrix44F;
-import com.qualcomm.vuforia.PIXEL_FORMAT;
-import com.qualcomm.vuforia.Renderer;
-import com.qualcomm.vuforia.State;
-import com.qualcomm.vuforia.Tool;
-import com.qualcomm.vuforia.Vec2I;
-import com.qualcomm.vuforia.VideoBackgroundConfig;
-import com.qualcomm.vuforia.VideoMode;
-import com.qualcomm.vuforia.Vuforia;
+import com.github.daemontus.renderer.R;
+import com.vuforia.CameraDevice;
+import com.vuforia.PIXEL_FORMAT;
+import com.vuforia.Renderer;
+import com.vuforia.State;
+import com.vuforia.Vec2I;
+import com.vuforia.VideoBackgroundConfig;
+import com.vuforia.VideoMode;
+import com.vuforia.Vuforia;
 
 /**
  * Represents simple Vuforia App Session.
@@ -55,10 +53,7 @@ public class AppSession implements Vuforia.UpdateCallbackInterface {
         private int mVuforiaFlags = 0;
 
         // Holds the camera configuration to use upon resuming
-        private int mCamera = CameraDevice.CAMERA.CAMERA_DEFAULT;
-
-    // Stores the projection matrix to use for rendering purposes
-        private Matrix44F mProjectionMatrix;
+        private int mCamera = CameraDevice.CAMERA_DIRECTION.CAMERA_DIRECTION_DEFAULT;
 
         // Stores orientation
         private boolean mIsPortrait = false;
@@ -165,8 +160,6 @@ public class AppSession implements Vuforia.UpdateCallbackInterface {
 
             Vuforia.setFrameFormat(PIXEL_FORMAT.RGB565, true);
 
-            setProjectionMatrix();
-
             mSessionControl.doStartTrackers();
 
             try
@@ -254,21 +247,11 @@ public class AppSession implements Vuforia.UpdateCallbackInterface {
         Vuforia.onPause();
     }
 
-
-    // Gets the projection matrix to be used for rendering
-    public Matrix44F getProjectionMatrix()
-    {
-        return mProjectionMatrix;
-    }
-
-
     // Callback called every cycle
     @Override
-    public void QCAR_onUpdate(State s)
-    {
-        mSessionControl.onQCARUpdate(s);
+    public void Vuforia_onUpdate(State state) {
+        mSessionControl.onQCARUpdate(state);
     }
-
 
     // Manages the configuration changes
     public void onConfigurationChanged()
@@ -281,9 +264,6 @@ public class AppSession implements Vuforia.UpdateCallbackInterface {
         {
             // configure video background
             configureVideoBackground();
-
-            // Update projection matrix:
-            setProjectionMatrix();
         }
 
     }
@@ -310,7 +290,7 @@ public class AppSession implements Vuforia.UpdateCallbackInterface {
             // Prevent the onDestroy() method to overlap with initialization:
             synchronized (mShutdownLock)
             {
-                Vuforia.setInitParameters(mActivity, mVuforiaFlags);
+                Vuforia.setInitParameters(mActivity, mVuforiaFlags, mActivity.getString(R.string.vuforia_key));
 
                 do
                 {
@@ -496,15 +476,6 @@ public class AppSession implements Vuforia.UpdateCallbackInterface {
     }
 
 
-    // Method for setting / updating the projection matrix for AR content
-    // rendering
-    private void setProjectionMatrix()
-    {
-        CameraCalibration camCal = CameraDevice.getInstance().getCameraCalibration();
-        mProjectionMatrix = Tool.getProjectionGL(camCal, 10.0f, 5000.0f);
-    }
-
-
     private void stopCamera()
     {
         mSessionControl.doStopTrackers();
@@ -537,7 +508,6 @@ public class AppSession implements Vuforia.UpdateCallbackInterface {
 
         VideoBackgroundConfig config = new VideoBackgroundConfig();
         config.setEnabled(true);
-        config.setSynchronous(true);
         config.setPosition(new Vec2I(0, 0));
 
         int xSize, ySize;

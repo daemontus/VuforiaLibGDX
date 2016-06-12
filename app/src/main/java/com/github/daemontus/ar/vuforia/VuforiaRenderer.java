@@ -4,13 +4,13 @@ import android.opengl.GLES20;
 import android.util.Log;
 
 import com.badlogic.gdx.graphics.GL10;
-import com.qualcomm.vuforia.CameraCalibration;
-import com.qualcomm.vuforia.CameraDevice;
-import com.qualcomm.vuforia.Renderer;
-import com.qualcomm.vuforia.State;
-import com.qualcomm.vuforia.TrackableResult;
-import com.qualcomm.vuforia.Vec2F;
-import com.qualcomm.vuforia.Vuforia;
+import com.vuforia.CameraCalibration;
+import com.vuforia.CameraDevice;
+import com.vuforia.Renderer;
+import com.vuforia.State;
+import com.vuforia.TrackableResult;
+import com.vuforia.Vec2F;
+import com.vuforia.Vuforia;
 
 /**
  * Vuforia renderer, responsible for video background rendering, tracking and position calculations

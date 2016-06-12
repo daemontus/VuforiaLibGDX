@@ -4,14 +4,14 @@ package com.github.daemontus.ar.vuforia;
  Copyright (c) 2012-2013 Qualcomm Connected Experiences, Inc.
  All Rights Reserved.
  ==============================================================================*/
-        import android.util.Log;
+import android.util.Log;
 
-        import com.qualcomm.vuforia.Matrix44F;
-        import com.qualcomm.vuforia.Renderer;
-        import com.qualcomm.vuforia.Vec2F;
-        import com.qualcomm.vuforia.Vec3F;
-        import com.qualcomm.vuforia.Vec4F;
-        import com.qualcomm.vuforia.VideoBackgroundConfig;
+import com.vuforia.Matrix44F;
+import com.vuforia.Renderer;
+import com.vuforia.Vec2F;
+import com.vuforia.Vec3F;
+import com.vuforia.Vec4F;
+import com.vuforia.VideoBackgroundConfig;
 
 
 public class SampleMath
