@@ -3,7 +3,6 @@ package com.github.daemontus.ar.vuforia;
 import android.opengl.GLES20;
 import android.util.Log;
 
-import com.badlogic.gdx.graphics.GL10;
 import com.vuforia.CameraCalibration;
 import com.vuforia.CameraDevice;
 import com.vuforia.Renderer;
@@ -37,7 +36,7 @@ public class VuforiaRenderer {
 
 
     // Called when the surface changed size.
-    public void onSurfaceChanged(GL10 gl, int width, int height)
+    public void onSurfaceChanged(int width, int height)
     {
         Log.d(LOGTAG, "GLRenderer.onSurfaceChanged");
 

@@ -10,7 +10,7 @@ android {
 
     sourceSets.main {
         jni.srcDirs = []
-        jniLibs.srcDir "$VUFORIA_SDK_DIR/$NATIVE_LIB_DIR/"
+        jniLibs.srcDirs = ["$VUFORIA_SDK_DIR/$NATIVE_LIB_DIR/", "lib/"]
     }
 
     defaultConfig {
@@ -40,11 +40,17 @@ android {
     }
 }
 
+repositories {
+    maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
+}
+
+ext {
+    gdxVersion = '1.9.3'
+}
+
 dependencies {
     compile 'com.android.support:appcompat-v7:23.+'
     compile files("$VUFORIA_SDK_DIR/$JAR_DIR/Vuforia.jar")
-    compile fileTree(dir: 'libs', include: '*.jar')
-    compile files('libs/gdx.jar')
-    //compile files('libs/vuforia.jar')
-    compile files('libs/gdx-backend-android.jar')
+    compile "com.badlogicgames.gdx:gdx:$gdxVersion"
+    compile "com.badlogicgames.gdx:gdx-backend-android:$gdxVersion"
 }

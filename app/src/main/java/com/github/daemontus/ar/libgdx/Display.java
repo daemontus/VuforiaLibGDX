@@ -4,7 +4,6 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.g3d.Model;
 import com.badlogic.gdx.graphics.g3d.ModelInstance;
-
 import com.github.daemontus.ar.vuforia.VuforiaRenderer;
 
 /**
@@ -22,10 +21,10 @@ public class Display implements Screen {
         mRenderer = new Renderer(vuforiaRenderer);
 
         AssetManager assets = new AssetManager();
-        assets.load("ship.g3dj", Model.class);
+        assets.load("jet.g3db", Model.class);
         assets.finishLoading();
 
-        model = assets.get("ship.g3dj", Model.class);
+        model = assets.get("jet.g3db", Model.class);
 
         modelInstance = new ModelInstance(model);
 
