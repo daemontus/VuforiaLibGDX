@@ -1,3 +1,9 @@
+## Deprecated
+
+Currently, the repo is deprecated, as it is not working with latest Vuforia SDK and I don't have the time to fix it (I am not doing AR any more). The repo is updated with latest SDK (as of July 2018), but the app sometimes crashes (race condition depending on whether Vuforia or LibGDX initialises first - seems to require some architectural changes compared to previous versions) and the model is not rendered (but the transform matrix seems to be computed correctly).
+
+I'll try to fix it if I find some time in the future, but for, consider it dead. I'm happy to give maintainer rights to anyone interested in keeping this alive.
+
 # VuforiaLibGDX
 Example of Vuforia and LibGDX integration for 3D model rendering in augmented reality. 
 
