@@ -2,7 +2,7 @@
 
 Currently, the repo is deprecated, as it is not working with latest Vuforia SDK and I don't have the time to fix it (I am not doing AR any more). The repo is updated with latest SDK (as of July 2018), but the app sometimes crashes (race condition depending on whether Vuforia or LibGDX initialises first - seems to require some architectural changes compared to previous versions) and the model is not rendered (but the transform matrix seems to be computed correctly).
 
-I'll try to fix it if I find some time in the future, but for, consider it dead. I'm happy to give maintainer rights to anyone interested in keeping this alive.
+I'll try to fix it if I find some time in the future, but for now, consider it dead. I'm happy to give maintainer rights to anyone interested in keeping this alive.
 
 If you wish to see the version working with older Vuforia SDK, see [here](https://github.com/daemontus/VuforiaLibGDX/tree/2fecef3c2d4699f8dcc9c2813a232f369e640013).
 
