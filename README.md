@@ -4,6 +4,8 @@ Currently, the repo is deprecated, as it is not working with latest Vuforia SDK 
 
 I'll try to fix it if I find some time in the future, but for, consider it dead. I'm happy to give maintainer rights to anyone interested in keeping this alive.
 
+If you wish to see the version working with older Vuforia SDK, see [here](https://github.com/daemontus/VuforiaLibGDX/tree/2fecef3c2d4699f8dcc9c2813a232f369e640013).
+
 # VuforiaLibGDX
 Example of Vuforia and LibGDX integration for 3D model rendering in augmented reality. 
 
