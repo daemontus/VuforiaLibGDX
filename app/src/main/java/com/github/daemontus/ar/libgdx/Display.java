@@ -16,9 +16,9 @@ public class Display implements Screen {
 
     private Renderer mRenderer;
 
-    public Display(VuforiaRenderer vuforiaRenderer) {
+    public Display() {
 
-        mRenderer = new Renderer(vuforiaRenderer);
+        mRenderer = new Renderer();
 
         AssetManager assets = new AssetManager();
         assets.load("jet.g3db", Model.class);
@@ -64,5 +64,9 @@ public class Display implements Screen {
     @Override
     public void resume() {
 
+    }
+
+    public void setVuforiaRenderer(VuforiaRenderer renderer) {
+        mRenderer.setVuforiaRenderer(renderer);
     }
 }

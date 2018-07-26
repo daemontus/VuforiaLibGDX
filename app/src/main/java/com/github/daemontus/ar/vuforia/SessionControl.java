@@ -20,10 +20,12 @@ public interface SessionControl {
 
     // To be called to start tracking with the initialized trackers and their
     // loaded data
+    @SuppressWarnings("UnusedReturnValue")
     boolean doStartTrackers();
 
 
     // To be called to stop the trackers
+    @SuppressWarnings("UnusedReturnValue")
     boolean doStopTrackers();
 
 
@@ -42,5 +44,14 @@ public interface SessionControl {
 
 
     // This callback is called every cycle
-    void onQCARUpdate(State state);
+    void onVuforiaUpdate(State state);
+
+
+    // This callback is called on Vuforia resume
+    void onVuforiaResumed();
+
+
+    // This callback is called once Vuforia has been started
+    void onVuforiaStarted();
+
 }

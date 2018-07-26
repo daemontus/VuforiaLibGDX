@@ -48,16 +48,15 @@ public class ArActivity extends AndroidApplication implements SessionControl {
         session = new AppSession(this);
         session.initAR(this, ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
-        mRenderer = new VuforiaRenderer(session);
-
-        FrameLayout container = (FrameLayout) findViewById(R.id.ar_container);
+        FrameLayout container = findViewById(R.id.ar_container);
 
         AndroidApplicationConfiguration config = new AndroidApplicationConfiguration();
         config.useAccelerometer = false;
         config.useCompass = false;
         //config.useGL20 = true;
 
-        mEngine = new Engine(mRenderer);
+        mEngine = new Engine();
+        // The game engine has to be initialized here. However, we don't have the renderer yet.
         View glView = initializeForView(mEngine, config);
 
         container.addView(glView);
@@ -70,27 +69,14 @@ public class ArActivity extends AndroidApplication implements SessionControl {
     protected void onResume() {
         super.onResume();
         Log.d(LOGTAG, "onResume");
-
-        //we do not resume AR here if splash screen is visible
-        try {
-            session.resumeAR();
-        } catch (VuforiaException e) {
-            Toast.makeText(this, "Unable to start augmented reality.", Toast.LENGTH_LONG).show();
-            Log.e(LOGTAG, e.getString());
-        }
+        session.onResume();
     }
 
     @Override
     protected void onPause() {
+        session.onPause();
         Log.d(LOGTAG, "onPause");
         super.onPause();
-
-        try {
-            session.pauseAR();
-        } catch (VuforiaException e) {
-            Toast.makeText(this, "Unable to stop augmented reality.", Toast.LENGTH_LONG).show();
-            Log.e(LOGTAG, e.getString());
-        }
     }
 
     @Override
@@ -104,13 +90,11 @@ public class ArActivity extends AndroidApplication implements SessionControl {
     @Override
     public void onInitARDone(VuforiaException exception) {
         if (exception == null) {
-            mRenderer.mIsActive = true;
+            mRenderer = new VuforiaRenderer(this, session);
+            mEngine.setVuforiaRenderer(mRenderer);
+            mRenderer.setActive(true);
 
-            try {
-                session.startAR(CameraDevice.CAMERA_DIRECTION.CAMERA_DIRECTION_DEFAULT);
-            } catch (VuforiaException e) {
-                Log.e(LOGTAG, e.getString());
-            }
+            session.startAR(CameraDevice.CAMERA_DIRECTION.CAMERA_DIRECTION_DEFAULT);
 
             boolean result = CameraDevice.getInstance().setFocusMode(CameraDevice.FOCUS_MODE.FOCUS_MODE_CONTINUOUSAUTO);
 
@@ -248,7 +232,7 @@ public class ArActivity extends AndroidApplication implements SessionControl {
         }
 
         if (posterDataSet != null) {
-            if (imageTracker.getActiveDataSet() == posterDataSet && !imageTracker.deactivateDataSet(posterDataSet)) {
+            if (imageTracker.getActiveDataSet(0) == posterDataSet && !imageTracker.deactivateDataSet(posterDataSet)) {
                 Log.d(LOGTAG, "Failed to destroy the tracking data set StonesAndChips because the data set could not be deactivated.");
                 result = false;
             } else if (!imageTracker.destroyDataSet(posterDataSet)) {
@@ -273,6 +257,18 @@ public class ArActivity extends AndroidApplication implements SessionControl {
     }
 
     @Override
-    public void onQCARUpdate(State state) {
+    public void onVuforiaUpdate(State state) {
+
     }
+
+    @Override
+    public void onVuforiaResumed() {
+
+    }
+
+    @Override
+    public void onVuforiaStarted() {
+        mRenderer.updateConfiguration();
+    }
+
 }

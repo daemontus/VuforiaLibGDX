@@ -1,5 +1,7 @@
 package com.github.daemontus.ar.libgdx;
 
+import android.util.Log;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
@@ -8,15 +10,20 @@ import com.badlogic.gdx.graphics.g3d.Environment;
 import com.badlogic.gdx.graphics.g3d.ModelBatch;
 import com.badlogic.gdx.graphics.g3d.ModelInstance;
 import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
+import com.badlogic.gdx.graphics.g3d.utils.DefaultTextureBinder;
+import com.badlogic.gdx.graphics.g3d.utils.RenderContext;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector3;
 
+import com.badlogic.gdx.utils.BufferUtils;
 import com.github.daemontus.ar.vuforia.SampleMath;
 import com.github.daemontus.ar.vuforia.VuforiaRenderer;
 import com.vuforia.Matrix44F;
 import com.vuforia.Tool;
 import com.vuforia.TrackableResult;
 import com.vuforia.VIDEO_BACKGROUND_REFLECTION;
+
+import java.nio.IntBuffer;
 
 /**
  * Class responsible for rendering and scene transformations.
@@ -32,7 +39,7 @@ public class Renderer {
     private ModelBatch modelBatch;
     private VuforiaRenderer vuforiaRenderer;
 
-    public Renderer(VuforiaRenderer arRenderer) {
+    public Renderer() {
 
         lights = new Environment();
         lights.set(new ColorAttribute(ColorAttribute.AmbientLight, Color.WHITE));
@@ -44,29 +51,34 @@ public class Renderer {
         camera.position.set(new Vector3(0,0,0));
         camera.lookAt(new Vector3(0,0,1));
 
-        this.vuforiaRenderer = arRenderer;
-
-        modelBatch = new ModelBatch();
+        IntBuffer buffer = BufferUtils.newIntBuffer(16);
+        Gdx.gl.glGetIntegerv(GL20.GL_MAX_TEXTURE_IMAGE_UNITS, buffer);
+        int units = buffer.get(0);
+        Log.d("TAG", "Max texture units: "+units);
+        modelBatch = new ModelBatch(new RenderContext(new DefaultTextureBinder(DefaultTextureBinder.WEIGHTED, 0)));
     }
 
     public void render(Display display, float delta) {
-
         GL20 gl = Gdx.gl;
 
         gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
 
         TrackableResult[] results = null;
 
-        if (vuforiaRenderer.mIsActive) {
+        if (vuforiaRenderer != null && vuforiaRenderer.isActive()) {
             //render camera background and find targets
-            results = vuforiaRenderer.processFrame();
+            results = vuforiaRenderer.onDrawFrame();
         }
 
         gl.glEnable(GL20.GL_DEPTH_TEST);
         gl.glEnable(GL20.GL_CULL_FACE);
 
 
-        setProjectionAndCamera(display, results, (float) Math.toDegrees(vuforiaRenderer.fieldOfViewRadians));
+        double FOV = 1.0;
+        if (vuforiaRenderer != null) {
+            FOV = Math.toDegrees(vuforiaRenderer.getFieldOfViewRadians());
+        }
+        setProjectionAndCamera(display, results, (float) FOV);
         modelBatch.begin(camera);
 
         gl.glDepthMask(true);
@@ -118,6 +130,7 @@ public class Renderer {
             camera.position.set(data[12], data[13], data[14]);
             camera.up.set(data[4], data[5], data[6]);
             camera.direction.set(data[8], data[9], data[10]);
+            Log.d("TAG", "Camera: "+data[12]+" "+data[13]+" "+data[14]);
             //update filed of view
             camera.fieldOfView = filedOfView;
 
@@ -137,6 +150,10 @@ public class Renderer {
 
     public void dispose() {
         modelBatch.dispose();
+    }
+
+    public void setVuforiaRenderer(VuforiaRenderer vuforiaRenderer) {
+        this.vuforiaRenderer = vuforiaRenderer;
     }
 
 }

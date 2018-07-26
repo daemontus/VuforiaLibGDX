@@ -2,11 +2,10 @@ apply plugin: 'com.android.application'
 
 def VUFORIA_SDK_DIR = '/Users/daemontus/Library/Vuforia'
 def NATIVE_LIB_DIR = 'build/lib'
-def JAR_DIR = 'build/java/vuforia'
+def JAR_DIR = 'build/java/Vuforia'
 
 android {
-    compileSdkVersion 23
-    buildToolsVersion '23.0.2'
+    compileSdkVersion 27
 
     sourceSets.main {
         jni.srcDirs = []
@@ -16,8 +15,8 @@ android {
     defaultConfig {
         applicationId "com.github.daemontus.renderer"
         minSdkVersion 15
-        targetSdkVersion 22
-        versionCode 1
+        targetSdkVersion 27
+        versionCode 2
         versionName "1.0"
     }
 
@@ -29,6 +28,9 @@ android {
             ndk {
                 abiFilters "armeabi-v7a"
             }
+            // The VUFORIA_KEY is located in ~/.gradle/gradle.properties.
+            // This way, you don't commit the key into your repository and keep it secret.
+            resValue "string", "vuforia_key", VUFORIA_KEY
         }
         debug {
             minifyEnabled false
@@ -36,6 +38,7 @@ android {
             ndk {
                 abiFilters "armeabi-v7a"
             }
+            resValue "string", "vuforia_key", VUFORIA_KEY
         }
     }
 }
@@ -45,12 +48,12 @@ repositories {
 }
 
 ext {
-    gdxVersion = '1.9.3'
+    gdxVersion = '1.9.8'
 }
 
 dependencies {
-    compile 'com.android.support:appcompat-v7:23.+'
-    compile files("$VUFORIA_SDK_DIR/$JAR_DIR/Vuforia.jar")
-    compile "com.badlogicgames.gdx:gdx:$gdxVersion"
-    compile "com.badlogicgames.gdx:gdx-backend-android:$gdxVersion"
+    implementation 'com.android.support:appcompat-v7:27.1.1'
+    implementation files("$VUFORIA_SDK_DIR/$JAR_DIR/Vuforia.jar")
+    implementation "com.badlogicgames.gdx:gdx:$gdxVersion"
+    implementation "com.badlogicgames.gdx:gdx-backend-android:$gdxVersion"
 }

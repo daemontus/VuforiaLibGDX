@@ -15,23 +15,30 @@ public class Engine extends Game {
     private FPSLogger fps;
     private VuforiaRenderer vuforiaRenderer;
 
-    public Engine(VuforiaRenderer vuforiaRenderer) {
-        this.vuforiaRenderer = vuforiaRenderer;
-    }
+    private boolean isCreated = false;
+    private int width = 0;
+    private int height = 0;
+    private Display mDisplay;
 
     @Override
     public void create () {
-        Display mDisplay = new Display(vuforiaRenderer);
-        setScreen(mDisplay);
-        vuforiaRenderer.initRendering();
         fps = new FPSLogger();
+        mDisplay = new Display();
+        mDisplay.setVuforiaRenderer(vuforiaRenderer);
+        setScreen(mDisplay);
+        if (vuforiaRenderer != null) {
+            vuforiaRenderer.onSurfaceCreated();
+        }
+        isCreated = true;
     }
 
     @Override
     public void resize(int width, int height) {
         super.resize(width, height);
+        this.width = width;
+        this.height = height;
         Log.d("ENGINE", "Resize: "+width+"x"+height);
-        vuforiaRenderer.onSurfaceChanged(width, height);
+        if (vuforiaRenderer != null) vuforiaRenderer.onSurfaceChanged(width, height);
     }
 
     @Override
@@ -40,4 +47,12 @@ public class Engine extends Game {
         fps.log();
     }
 
+    public void setVuforiaRenderer(VuforiaRenderer vuforiaRenderer) {
+        this.vuforiaRenderer = vuforiaRenderer;
+        if (isCreated) {
+            mDisplay.setVuforiaRenderer(vuforiaRenderer);
+            vuforiaRenderer.onSurfaceCreated();
+        }
+        if (width != 0 && height != 0) resize(width, height);
+    }
 }
